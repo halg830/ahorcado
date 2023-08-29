@@ -1,5 +1,6 @@
 <script setup>
 import {ref, computed} from 'vue'
+import descarga from '/src/assets/descarga.png'
 import error1 from '/src/assets/error1.png'
 import error2 from '/src/assets/error2.png'
 
@@ -8,6 +9,8 @@ const alfabeto = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65
 const palabra = "verde"
 
 const descubiertas = ref([""])
+
+const imgError = [descarga, error1, error2]
 
 const errores = ref(0)
 
@@ -22,8 +25,6 @@ const comprobar = (letra)=>{
 
   errores.value+=1
 }
-
-
 
 const buscar = computed(()=>{
   return (letra)=>{
@@ -54,7 +55,7 @@ const buscar = computed(()=>{
       </div>
     </div>
     <div>
-      <img :src="error1" alt="">
+      <img :src="imgError[errores]" alt="">
     </div>
   </div>
 </template>
