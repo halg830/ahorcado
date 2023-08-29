@@ -1,4 +1,8 @@
 body{
+  margin: 0;
+}
+
+#contenedorTodo{
   background-image: url(https://img.freepik.com/vector-gratis/patron-controles-clasicos-videojuegos-estilo-linea-neon_24908-58917.jpg);
   background-repeat: no-repeat;
   background-position: center;

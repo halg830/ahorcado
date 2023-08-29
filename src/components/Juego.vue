@@ -10,7 +10,9 @@ const alfabeto = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65
             <button v-for="(item, index) in alfabeto" :key="index">{{ item }}</button>
         </div>
     </div>
-    <div></div>
+    <div>
+      
+    </div>
   </div>
 </template>
 

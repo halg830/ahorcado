@@ -3,10 +3,10 @@
 </script>
 
 <template>
-<div class="contenedortodo">
-
-</div>
-  <a href="../juego.html">Empezar</a>
+    <div id="contenedorTodo">
+      <a href="../juego.html">Empezar</a>
+    
+    </div>
 </template>
 
 <style scoped>
