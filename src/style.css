@@ -1,4 +1,8 @@
 body{
+  margin: 0;
+}
+
+#contenedorTodo{
   background-image: url(https://p4.wallpaperbetter.com/wallpaper/1012/64/860/art-black-and-white-black-and-white-castle-wallpaper-preview.jpg);
   background-repeat: no-repeat;
   background-position: center;

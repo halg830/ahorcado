@@ -1,12 +1,12 @@
 <script setup>
-
+ 
 </script>
 
 <template>
-<div class="contenedortodo">
-
-</div>
-  
+    <div id="contenedorTodo">
+      <a href="../juego.html">Empezar</a>
+    
+    </div>
 </template>
 
 <style scoped>
