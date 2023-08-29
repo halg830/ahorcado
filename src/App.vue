@@ -3,6 +3,9 @@
 </script>
 
 <template>
+<div class="contenedortodo">
+
+</div>
   <a href="../juego.html">Empezar</a>
 </template>
 
