@@ -1,40 +1,63 @@
 <script setup>
-import {ref, computed} from 'vue'
-import descarga from '/src/assets/descarga.png'
-import error1 from '/src/assets/error1.png'
-import error2 from '/src/assets/error2.png'
+import { ref, computed } from "vue";
+import descarga from "/src/assets/descarga.png";
+import error1 from "/src/assets/error1.png";
+import error2 from "/src/assets/error2.png";
+import error3 from "/src/assets/error3.png";
+import error4 from "/src/assets/error4.png";
+import error5 from "/src/assets/error5.png";
+import error6 from "/src/assets/error6.png";
 
-const alfabeto = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index))
+const alfabeto = Array.from({ length: 26 }, (_, index) =>
+  String.fromCharCode(65 + index)
+);
+const palabra = "verde";
+const descubiertas = ref([""]);
+const imgError = [descarga, error1, error2, error3, error4, error5, error6];
+const errores = ref(0);
 
-const palabra = "verde"
+const comprobar = (letra) => {
+  if (descubiertas.value.includes(letra)) return;
 
-const descubiertas = ref([""])
-
-const imgError = [descarga, error1, error2]
-
-const errores = ref(0)
-
-const comprobar = (letra)=>{
-  if(descubiertas.value.includes(letra)) return
-
-  if(palabra.includes(letra.toLowerCase())){
-    descubiertas.value.push(letra)
-    event.target.setAttribute("disabled", "true")
-    return
+  if (palabra.includes(letra.toLowerCase())) {
+    descubiertas.value.push(letra);
+    event.target.setAttribute("disabled", "true");
+    return;
   }
 
-  errores.value+=1
-}
+  errores.value += 1;
+};
 
-const buscar = computed(()=>{
-  return (letra)=>{
-    const prueba = descubiertas.value.find(e=> String(e)===String(letra.toUpperCase()))
-      if(prueba) return letra
-      return ""
-  } 
-})
+const buscar = computed(() => {
+  return (letra) => {
+    const prueba = descubiertas.value.find(
+      (e) => String(e) === String(letra.toUpperCase())
+    );
+    if (prueba) {
+      return letra;
+    }
+    return "";
+  };
+});
 
+const completado = computed(() => {
+  console.log(descubiertas.value)
+  let confirmacion = false;
 
+  for (const letra of palabra) {
+    console.log("letra:", letra);
+    if (!descubiertas.value.includes(letra.toUpperCase())) {
+      confirmacion = false;
+      break;
+    }
+    
+    confirmacion= true
+  }
+
+  if(confirmacion===true) return "Ganaste"
+
+  return "Nada"
+});
 </script>
 
 <template>
@@ -43,20 +66,27 @@ const buscar = computed(()=>{
       <div class="palabra">
         <div v-for="(letra, index) in palabra" :key="index" class="letra">
           <div class="cuadrito">
-            <h1 >{{buscar(letra) }}</h1>
+            <h1>{{ buscar(letra) }}</h1>
           </div>
 
-          <hr>
+          <hr />
         </div>
       </div>
 
       <div>
-        <button v-for="(item, index) in alfabeto" :key="index" @click="comprobar(item)">{{ item }}</button>
+        <button
+          v-for="(item, index) in alfabeto"
+          :key="index"
+          @click="comprobar(item)"
+        >
+          {{ item }}
+        </button>
       </div>
     </div>
     <div>
-      <img :src="imgError[errores]" alt="">
+      <img :src="imgError[errores]" alt="" />
     </div>
+    <h1>hola: {{completado}}</h1>
   </div>
 </template>
 
