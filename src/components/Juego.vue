@@ -7,6 +7,7 @@ import error3 from "/src/assets/error3.png";
 import error4 from "/src/assets/error4.png";
 import error5 from "/src/assets/error5.png";
 import error6 from "/src/assets/error6.png";
+import imgPerdiste from "/src/assets/gameOver.jpg"
 
 const alfabeto = Array.from({ length: 26 }, (_, index) =>
   String.fromCharCode(65 + index)
@@ -41,11 +42,9 @@ const buscar = computed(() => {
 });
 
 const completado = computed(() => {
-  console.log(descubiertas.value)
   let confirmacion = false;
 
   for (const letra of palabra) {
-    console.log("letra:", letra);
     if (!descubiertas.value.includes(letra.toUpperCase())) {
       confirmacion = false;
       break;
@@ -78,13 +77,14 @@ const completado = computed(() => {
           v-for="(item, index) in alfabeto"
           :key="index"
           @click="comprobar(item)"
+          :disabled="errores>6 || completado==='Ganaste'"
         >
           {{ item }}
         </button>
       </div>
     </div>
     <div>
-      <img :src="imgError[errores]" alt="" />
+      <img :src="errores<=6 ? imgError[errores] : imgPerdiste" alt="" />
     </div>
     <h1>hola: {{completado}}</h1>
   </div>
