@@ -27,6 +27,7 @@ const comprobar = (letra) => {
   }
 
   errores.value += 1;
+  event.target.setAttribute("disabled", "true");
 };
 
 const buscar = computed(() => {

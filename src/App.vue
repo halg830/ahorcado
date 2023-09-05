@@ -1,58 +1,135 @@
 <script setup>
- 
+import imgAnimales from '/src/assets/animales.avif'
+import imgColores from '/src/assets/colores.jpg'
+import imgFrutas from '/src/assets/frutas.avif'
+import { ref } from 'vue';
+
+const icon = ref(false);
+
+const categorias = [
+	{
+		nombre: "Animales",
+		imagen: imgAnimales
+	},
+	{
+		nombre: "Colores",
+		imagen: imgColores
+	},
+	{
+		nombre: "Frutas",
+		imagen: imgFrutas
+	}
+]
+
+const dificultades = ["Fácil", "Medio", "Difícil"]
+
+const data = ref({
+	categoria: "",
+	dificultad: ""
+})
+
+const formatear = ()=>{
+	data.value = {
+		categoria: "",
+		dificultad: ""
+	}
+}
 </script>
 
+<script>
+import { ref } from 'vue'
+
+export default {
+	setup() {
+		return {
+			icon: ref(false),
+			bar: ref(false),
+			bar2: ref(false),
+			toolbar: ref(false)
+		}
+	},
+	
+}
+</script>
+
+
+
 <template>
-    <div id="contenedorTodo">
-        <div class="parteuno">
-            <div><h1 class="titulo">AHORCADO</h1></div>
-            <button class="boton"><a href="../juego.html" style="text-decoration: none;"><span>Empezar</span></a></button>
-        </div>
-    </div>
+	<div id="contenedorTodo">
+		<div class="parteuno">
+			<div>
+				<h1 class="titulo">AHORCADO</h1>
+			</div>
+			<button class="boton" @click="icon = true; formatear()"><span>Empezar</span></button>
+		</div>
+		
+		<div class="q-pa-md q-gutter-sm">
+			<q-dialog v-model="icon">
+				<q-card>
+					<q-card-section class="row items-center q-pb-none">
+						<div class="text-h6">{{ data.categoria === "" ? "Elije la categoría" : "Elije la dificultad" }}
+						</div>
+						<q-space />
+						<q-btn icon="X" flat round dense v-close-popup />
+					</q-card-section>
+
+					<q-card-section class="row">
+						<div v-for="(item, index) in categorias" :key="index" class="cardCategoria"
+							v-if="data.categoria === ''" @click="data.categoria = item.nombre">
+							<img :src="item.imagen" alt="" class="imgsCategoria">
+							<h4>{{ item.nombre }}</h4>
+						</div>
+
+						<button v-for="(item, i) in dificultades" :key="i" v-else @click="data.dificultad=item"><a href="../juego.html" style="text-decoration: none;">{{ item }}</a></button>
+					</q-card-section>
+				</q-card>
+			</q-dialog>
+		</div>
+	</div>
 </template>
 
 <style scoped>
-
 /* *{
     margin: 0;
 } */
-.titulo{
-    font-size: 6vw;
-    font-family: 'Press Start 2P', cursive;
-    background: linear-gradient(yellow,red);
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    animation: text 5s linear infinite;
+.titulo {
+	font-size: 6vw;
+	font-family: 'Press Start 2P', cursive;
+	background: linear-gradient(yellow, red);
+	color: transparent;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	animation: text 5s linear infinite;
 }
 
-a{
+a {
 	z-index: 5;
 	width: 80%;
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
 }
 
 @keyframes text {
-    0% {
-        filter: hue-rotate(0deg);
-    }
-    100%{
-        filter: hue-rotate(360deg);
-    }
+	0% {
+		filter: hue-rotate(0deg);
+	}
+
+	100% {
+		filter: hue-rotate(360deg);
+	}
 }
 
-.parteuno{
-    /* padding: 85px 0px; */
-    display: flex;
-    /* justify-content: space-between; */
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.399);
-    height: 100%;
+.parteuno {
+	/* padding: 85px 0px; */
+	display: flex;
+	/* justify-content: space-between; */
+	flex-direction: column;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.399);
+	height: 100%;
 }
 
 .boton {
@@ -73,14 +150,14 @@ a{
 	border-radius: 5px;
 	position: relative;
 	overflow: hidden;
-    
+
 }
 
 .boton span {
 	position: relative;
 	z-index: 2;
 	transition: .3s ease all;
-    color: white;
+	color: white;
 }
 
 .boton::after {
@@ -104,6 +181,29 @@ a{
 
 .boton:hover {
 	background: #141414;
-    font-size: 30px;
+	font-size: 30px;
+}
+
+.imgsCategoria {
+
+	height: 100px;
+}
+
+.cardCategoria {
+	margin: 0 10px;
+	border: 1px solid black;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.cardCategoria:hover {
+	transform: scale(1.1);
+}
+
+h4 {
+	margin: 0;
 }
 </style>
