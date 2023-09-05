@@ -27,6 +27,15 @@
     animation: text 5s linear infinite;
 }
 
+a{
+	z-index: 5;
+	width: 80%;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
 @keyframes text {
     0% {
         filter: hue-rotate(0deg);
