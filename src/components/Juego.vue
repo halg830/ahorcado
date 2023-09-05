@@ -7,14 +7,17 @@ import error3 from "/src/assets/error3.png";
 import error4 from "/src/assets/error4.png";
 import error5 from "/src/assets/error5.png";
 import error6 from "/src/assets/error6.png";
-import imgPerdiste from "/src/assets/gameOver.jpg";
+import error7 from "/src/assets/error7.png";
+import error8 from "/src/assets/error8.png";
+import error9 from "/src/assets/error9.png";
+import imgPerdiste from "/src/assets/gameover.png";
 
 const alfabeto = Array.from({ length: 26 }, (_, index) =>
   String.fromCharCode(65 + index)
 );
 const palabra = "verde";
 const descubiertas = ref([""]);
-const imgError = [inicio, error1, error2, error3, error4, error5, error6];
+const imgError = [inicio, error1, error2, error3, error4, error5, error6, error7, error8, error9,];
 const errores = ref(0);
 
 const comprobar = (letra) => {
@@ -63,7 +66,7 @@ const completado = computed(() => {
 <template>
   <div class="contenedor">
     <div class="parte1">
-        <img id="imagen" :src="errores <= 6 ? imgError[errores] : imgPerdiste" alt="" />
+        <img id="imagen" :src="errores <= 9 ? imgError[errores] : imgPerdiste" alt="" />
       <div>
         <div class="palabra">
           <div v-for="(letra, index) in palabra" :key="index" class="letra">
@@ -80,7 +83,7 @@ const completado = computed(() => {
         v-for="(item, index) in alfabeto"
         :key="index"
         @click="comprobar(item)"
-        :disabled="errores > 6 || completado === 'Ganaste'"
+        :disabled="errores > 9 || completado === 'Ganaste'"
       >
         {{ item }}
       </button>
@@ -94,6 +97,11 @@ const completado = computed(() => {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-image: url("src/assets/fondo.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 10px;
 }
 
 .parte1 {
@@ -101,20 +109,19 @@ const completado = computed(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 60%;
+  padding: 10px;
   width: 100%;
+  background: rgba(0, 0, 0, 0.551);
 }
 #imagen{
-  width: 50vh;
+  width: 65vh;
   height: 50vh;
   margin: 0%;
 }
 .parte2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40%;
-  width: 100%;
+  display: grid;
+    width: 100%;
+    grid-template-columns: repeat(9,1fr);
 }
 .palabra {
   display: flex;
