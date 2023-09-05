@@ -90,10 +90,11 @@
 
 .boton:hover::after {
 	transform: scale(1000);
-	background: #26a104;
+	background: #1d5f0a;
 }
 
 .boton:hover {
 	background: #141414;
+    font-size: 30px;
 }
 </style>
