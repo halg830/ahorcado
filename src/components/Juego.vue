@@ -27,6 +27,7 @@ const comprobar = (letra) => {
   }
 
   errores.value += 1;
+  event.target.setAttribute("disabled", "true");
 };
 
 const buscar = computed(() => {
@@ -65,7 +66,7 @@ const completado = computed(() => {
       <div class="palabra">
         <div v-for="(letra, index) in palabra" :key="index" class="letra">
           <div class="cuadrito">
-            <h1>{{ buscar(letra) }}</h1>
+            <p>{{ buscar(letra) }}</p>
           </div>
 
           <hr />
@@ -100,8 +101,11 @@ const completado = computed(() => {
 }
 
 .cuadrito {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  font-size: x-large;
 }
 </style>
