@@ -2,7 +2,7 @@
 import imgAnimales from '/src/assets/animales.avif'
 import imgColores from '/src/assets/colores.jpg'
 import imgFrutas from '/src/assets/frutas.avif'
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import inicio from "/src/assets/inicio.png";
 import error1 from "/src/assets/error1.png";
 import error2 from "/src/assets/error2.png";
@@ -14,7 +14,7 @@ import error7 from "/src/assets/error7.png";
 import error8 from "/src/assets/error8.png";
 import error9 from "/src/assets/error9.png";
 import imgPerdiste from "/src/assets/gameover.png";
-
+console.log("hola")
 const app = ref(true)
 
 const alfabeto = Array.from({ length: 26 }, (_, index) =>
@@ -23,7 +23,7 @@ const alfabeto = Array.from({ length: 26 }, (_, index) =>
 
 const data = ref({
 	categoria: "Animales",
-	dificultad: "Fácil"
+	dificultad: "Medio"
 })
 
 const bancoPalabras = {
@@ -44,11 +44,9 @@ const bancoPalabras = {
 	}
 };
 
-const obtenerNumero = () => Math.floor(Math.random() * 3)
+const obtenerNumero = () => Math.floor(Math.random() * 4)
 
-console.log(!app.value ? bancoPalabras[data.value.categoria][data.value.dificultad[obtenerNumero()]] : "")
-
-const palabra = ref( bancoPalabras[data.value.categoria][data.value.dificultad][0])
+const palabra = ref( bancoPalabras[data.value.categoria][data.value.dificultad[obtenerNumero()]])
 const descubiertas = ref([""]);
 const imgError = [inicio, error1, error2, error3, error4, error5, error6, error7, error8, error9,];
 const errores = ref(0);
@@ -94,154 +92,32 @@ const completado = computed(() => {
 
 	return "Nada";
 });
-
-const icon = ref(false);
-
-const categorias = [
-	{
-		nombre: "Animales",
-		imagen: imgAnimales
-	},
-	{
-		nombre: "Colores",
-		imagen: imgColores
-	},
-	{
-		nombre: "Frutas",
-		imagen: imgFrutas
-	}
-]
-
-const dificultades = ["Fácil", "Medio", "Difícil"]
-
-const formatear = () => {
-	data.value = {
-		categoria: "",
-		dificultad: ""
-	}
-}
-
-
-
-
-/////////
-
-
-// Inicializa una variable para los datos y un indicador para verificar si están cargados
-const datos = ref([]);
-const datosCargados = ref(false);
-
-// Simula una solicitud HTTP para cargar los datos (esto puede ser una solicitud real)
-const cargarDatos = async (item) => {
-	// Simula una demora de 1 segundo para cargar los datos (elimina esto en tu aplicación real)
-
-	// Luego, asigna los datos y marca que están cargados
-	datos.value = ['Dato 1', 'Dato 2', 'Dato 3'];
-	data.value.dificultad = item
-	app.value = false
-	datosCargados.value = true;
-
-};
-
-// Llama a cargarDatos cuando el componente se monta
-
-const comenzar = (item) => {
-
-	data.value.dificultad = item
-
-	app.value = false
-}
-
-onMounted(() => {
-
-});
-
-const agregarcategoria = (item)=>{
-	data.value.categoria = item
-}
-
-
-	
-
 </script>
-
-<script>
-import { ref } from 'vue'
-
-export default {
-	setup() {
-		return {
-			icon: ref(false),
-			bar: ref(false),
-			bar2: ref(false),
-			toolbar: ref(false)
-		}
-	},
-
-}
-</script>
-
-
 
 <template>
-	<div id="contenedorTodo" v-if="app">
-		{{ palabra }}
-		<div class="parteuno">
-			<div>
-				<h1 class="titulo">AHORCADO</h1>
-			</div>
-			<button class="boton" @click="icon = true; formatear()"><span>Empezar</span></button>
-		</div>
+    <div class="contenedor">
 
-		<div class="q-pa-md q-gutter-sm">
-			<q-dialog v-model="icon">
-				<q-card>
-					<q-card-section class="row items-center q-pb-none">
-						<div class="text-h6">{{ data.categoria === "" ? "Elije la categoría" : "Elije la dificultad" }}
-						</div>
-						<q-space />
-						<q-btn icon="X" flat round dense v-close-popup />
-					</q-card-section>
-
-					<q-card-section class="row">
-						<div v-for="(item, index) in categorias" :key="index" class="cardCategoria"
-							v-if="data.categoria === ''" @click="agregarcategoria(item.nombre)">
-							<img :src="item.imagen" alt="" class="imgsCategoria">
-							<h4>{{ item.nombre }}</h4>
-						</div>
-
-						<button v-for="(item, i) in dificultades" :key="i" v-else @click="() => cargarDatos(item)">{{ item
-						}}</button>
-					</q-card-section>
-				</q-card>
-			</q-dialog>
-		</div>
-	</div>
-
-	<div class="contenedor" v-if="!app">
-
-		<div class="parte1">
-			<img id="imagen" :src="errores <= 9 ? imgError[errores] : imgPerdiste" alt="" />
-			<div>
-				<div class="palabra">
-					{{ palabra }}
-					<div v-for="(letra, index) in palabra" :key="index" class="letra">
-						<div class="cuadrito">
-							<h1 class="tamaño">{{ buscar(letra) }}</h1>
-						</div>
-						<hr />
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="parte2">
-			<button v-for="(item, index) in alfabeto" :key="index" @click="comprobar(item)"
-				:disabled="errores > 9 || completado === 'Ganaste'">
-				{{ item }}
-			</button>
-		</div>
-		<!-- <h1>hola: {{completado}}</h1> -->
-	</div>
+<div class="parte1">
+    <img id="imagen" :src="errores <= 9 ? imgError[errores] : imgPerdiste" alt="" />
+    <div>
+        <div class="palabra">
+            <div v-for="(letra, index) in palabra" :key="index" class="letra">
+                <div class="cuadrito">
+                    <h1 class="tamaño">{{ buscar(letra) }}</h1>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="parte2">
+    <button v-for="(item, index) in alfabeto" :key="index" @click="comprobar(item)"
+        :disabled="errores > 9 || completado === 'Ganaste'">
+        {{ item }}
+    </button>
+</div>
+<!-- <h1>hola: {{completado}}</h1> -->
+</div>
 </template>
 
 <style scoped>
