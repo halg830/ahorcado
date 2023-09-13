@@ -46,9 +46,19 @@ const bancoPalabras = {
 
 const obtenerNumero = () => Math.floor(Math.random() * 3)
 
-console.log(!app.value ? bancoPalabras[data.value.categoria][data.value.dificultad[obtenerNumero()]] : "")
+const palabra = ref([])
 
-const palabra = ref( bancoPalabras[data.value.categoria][data.value.dificultad][0])
+const armarPalabra = ()=>{
+	console.log(data.value)
+	const strPalabra = bancoPalabras[data.value.categoria][data.value.dificultad][0]
+	const arrPalabra = Array.from(strPalabra)
+	for(const letra of arrPalabra){
+		palabra.value.push(letra)
+	}
+}
+
+
+
 const descubiertas = ref([""]);
 const imgError = [inicio, error1, error2, error3, error4, error5, error6, error7, error8, error9,];
 const errores = ref(0);
@@ -134,10 +144,11 @@ const datosCargados = ref(false);
 // Simula una solicitud HTTP para cargar los datos (esto puede ser una solicitud real)
 const cargarDatos = async (item) => {
 	// Simula una demora de 1 segundo para cargar los datos (elimina esto en tu aplicación real)
-
+	
 	// Luego, asigna los datos y marca que están cargados
 	datos.value = ['Dato 1', 'Dato 2', 'Dato 3'];
 	data.value.dificultad = item
+	armarPalabra()
 	app.value = false
 	datosCargados.value = true;
 
