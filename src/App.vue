@@ -1,7 +1,7 @@
 <script setup>
-import imgAnimales from '/src/assets/animales.avif'
-import imgColores from '/src/assets/colores.jpg'
-import imgFrutas from '/src/assets/frutas.avif'
+import imgAnimales from "/src/assets/animales.avif";
+import imgColores from "/src/assets/colores.jpg";
+import imgFrutas from "/src/assets/frutas.avif";
 import { ref, computed, onMounted } from "vue";
 import inicio from "/src/assets/inicio.png";
 import error1 from "/src/assets/error1.png";
@@ -14,128 +14,160 @@ import error7 from "/src/assets/error7.png";
 import error8 from "/src/assets/error8.png";
 import error9 from "/src/assets/error9.png";
 import imgPerdiste from "/src/assets/gameover.png";
+import imgGanar from "/src/assets/ganar.jpg";
 
-const app = ref(true)
+const app = ref(true);
 
 const alfabeto = Array.from({ length: 26 }, (_, index) =>
-	String.fromCharCode(65 + index)
+  String.fromCharCode(65 + index)
 );
 
+const cambioPreguntaModal = ref(true) //true: primera pregunta, false: segunda
+
 const data = ref({
-	categoria: "Animales",
-	dificultad: "Fácil"
-})
+  categoria: "Animales",
+  dificultad: "Fácil",
+});
 
 const bancoPalabras = {
-	"Animales": {
-		"Fácil": ["gato", "perro", "pato", "pez"],
-		"Medio": ["elefante", "jirafa", "tigre", "rinoceronte"],
-		"Difícil": ["hipopotamo", "cocodrilo", "pinguino", "murcielago"]
-	},
-	"Colores": {
-		"Fácil": ["verde", "rojo", "azul", "amarillo"],
-		"Medio": ["naranja", "violeta", "rosado", "gris"],
-		"Difícil": ["turquesa", "beige", "magenta"]
-	},
-	"Frutas": {
-		"Fácil": ["manzana", "uva", "pera", "fresa"],
-		"Medio": ["sandia", "naranja", "platano", "kiwi"],
-		"Difícil": ["granada", "mango", "papaya", "frambuesa"]
-	}
+  Animales: {
+    Fácil: ["gato", "perro", "pato", "pez"],
+    Medio: ["elefante", "jirafa", "tigre", "rinoceronte"],
+    Difícil: ["hipopotamo", "cocodrilo", "pinguino", "murcielago"],
+  },
+  Colores: {
+    Fácil: ["verde", "rojo", "azul", "amarillo"],
+    Medio: ["naranja", "violeta", "rosado", "gris"],
+    Difícil: ["turquesa", "beige", "magenta"],
+  },
+  Frutas: {
+    Fácil: ["manzana", "uva", "pera", "fresa"],
+    Medio: ["sandia", "naranja", "platano", "kiwi"],
+    Difícil: ["granada", "mango", "papaya", "frambuesa"],
+  },
 };
 
-const obtenerNumero = () => Math.floor(Math.random() * 3)
+const obtenerNumero = () => Math.floor(Math.random() * 3);
 
-const palabra = ref([])
+const palabra = ref([]);
 
-const armarPalabra = ()=>{
-	console.log(data.value)
-	const strPalabra = bancoPalabras[data.value.categoria][data.value.dificultad][0]
-	const arrPalabra = Array.from(strPalabra)
-	for(const letra of arrPalabra){
-		palabra.value.push(letra)
-	}
-}
-
-
+const armarPalabra = () => {
+  console.log(data.value);
+  const strPalabra =
+    bancoPalabras[data.value.categoria][data.value.dificultad][obtenerNumero()];
+  const arrPalabra = Array.from(strPalabra);
+  if(palabra.value.length>0) palabra.value = []
+  for (const letra of arrPalabra) {
+    palabra.value.push(letra);
+  }
+};
 
 const descubiertas = ref([""]);
-const imgError = [inicio, error1, error2, error3, error4, error5, error6, error7, error8, error9,];
+const imgError = [
+  inicio,
+  error1,
+  error2,
+  error3,
+  error4,
+  error5,
+  error6,
+  error7,
+  error8,
+  error9,
+];
 const errores = ref(0);
 
+const cantErrorDificultad = {
+	Fácil: 1,
+	Medio: 2,
+	Difícil: 3
+}
+
 const comprobar = (letra) => {
-	if (descubiertas.value.includes(letra)) return;
+  console.log("principio")
 
-	if (palabra.value.includes(letra.toLowerCase())) {
-		descubiertas.value.push(letra);
-		event.target.setAttribute("disabled", "true");
-		return;
-	}
+  if (palabra.value.includes(letra.toLowerCase()) ) {
+	console.log(descubiertas.value.includes(letra), "data", data.value.dificultad!="Difícil" )
+	if(descubiertas.value.includes(letra) && data.value.dificultad==="Difícil") {
+		console.log("hola")
+		errores.value+=cantErrorDificultad[data.value.dificultad]
+		return
+	} 
+	console.log("adios")
+    descubiertas.value.push(letra);
+    if(data.value.dificultad!="Difícil") event.target.setAttribute("disabled", "true");
+    return;
+  }
 
-	errores.value += 1;
-	event.target.setAttribute("disabled", "true");
+  console.log("sin if");
+  errores.value += cantErrorDificultad[data.value.dificultad]
+  if(data.value.dificultad!="Difícil") event.target.setAttribute("disabled", "true");
 };
 
 const buscar = computed(() => {
-	return (letra) => {
-		const prueba = descubiertas.value.find(
-			(e) => String(e) === String(letra.toUpperCase())
-		);
-		if (prueba) {
-			return letra;
-		}
-		return "";
-	};
+  return (letra) => {
+    const prueba = descubiertas.value.find(
+      (e) => String(e) === String(letra.toUpperCase())
+    );
+    if (prueba) {
+      return letra;
+    }
+    return "";
+  };
 });
 
 const completado = computed(() => {
-	let confirmacion = false;
+  let confirmacion = false;
 
-	for (const letra of palabra.value) {
-		if (!descubiertas.value.includes(letra.toUpperCase())) {
-			confirmacion = false;
-			break;
-		}
+  for (const letra of palabra.value) {
+    if (!descubiertas.value.includes(letra.toUpperCase())) {
+      confirmacion = false;
+      break;
+    }
 
-		confirmacion = true;
-	}
+    confirmacion = true;
+  }
 
-	if (confirmacion === true) return "Ganaste";
+  if (confirmacion === true) return "Ganaste";
 
-	return "Nada";
+  return "Nada";
 });
+
+const volverJugar = (confirmacion)=>{
+	if(confirmacion==="Ganaste" || errores.value>=9) icon.value = true; return
+
+	return
+}
+
+//////
 
 const icon = ref(false);
 
 const categorias = [
-	{
-		nombre: "Animales",
-		imagen: imgAnimales
-	},
-	{
-		nombre: "Colores",
-		imagen: imgColores
-	},
-	{
-		nombre: "Frutas",
-		imagen: imgFrutas
-	}
-]
+  {
+    nombre: "Animales",
+    imagen: imgAnimales,
+  },
+  {
+    nombre: "Colores",
+    imagen: imgColores,
+  },
+  {
+    nombre: "Frutas",
+    imagen: imgFrutas,
+  },
+];
 
-const dificultades = ["Fácil", "Medio", "Difícil"]
+const dificultades = ["Fácil", "Medio", "Difícil"];
 
 const formatear = () => {
-	data.value = {
-		categoria: "",
-		dificultad: ""
-	}
-}
-
-
-
+  data.value = {
+    categoria: "",
+    dificultad: "",
+  };
+};
 
 /////////
-
 
 // Inicializa una variable para los datos y un indicador para verificar si están cargados
 const datos = ref([]);
@@ -143,116 +175,147 @@ const datosCargados = ref(false);
 
 // Simula una solicitud HTTP para cargar los datos (esto puede ser una solicitud real)
 const cargarDatos = async (item) => {
-	// Simula una demora de 1 segundo para cargar los datos (elimina esto en tu aplicación real)
-	
-	// Luego, asigna los datos y marca que están cargados
-	datos.value = ['Dato 1', 'Dato 2', 'Dato 3'];
-	data.value.dificultad = item
-	armarPalabra()
-	app.value = false
-	datosCargados.value = true;
-
+  // Simula una demora de 1 segundo para cargar los datos (elimina esto en tu aplicación real)
+descubiertas.value=[""]	
+  icon.value=false
+	cambioPreguntaModal.value=true
+	errores.value=0
+  // Luego, asigna los datos y marca que están cargados
+  datos.value = ["Dato 1", "Dato 2", "Dato 3"];
+  data.value.dificultad = item;
+  armarPalabra();
+  app.value = false;
+  datosCargados.value = true;
 };
 
 // Llama a cargarDatos cuando el componente se monta
 
 const comenzar = (item) => {
+  data.value.dificultad = item;
 
-	data.value.dificultad = item
+  app.value = false;
+};
 
-	app.value = false
-}
+onMounted(() => {});
 
-onMounted(() => {
-
-});
-
-const agregarcategoria = (item)=>{
-	data.value.categoria = item
-}
-
-
-	
-
+const agregarcategoria = (item) => {
+  data.value.categoria = item;
+  cambioPreguntaModal.value=false
+};
 </script>
 
 <script>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 export default {
-	setup() {
-		return {
-			icon: ref(false),
-			bar: ref(false),
-			bar2: ref(false),
-			toolbar: ref(false)
-		}
-	},
-
-}
+  setup() {
+    return {
+      icon: ref(false),
+      bar: ref(false),
+      bar2: ref(false),
+      toolbar: ref(false),
+    };
+  },
+};
 </script>
 
-
-
 <template>
-	<div id="contenedorTodo" v-if="app">
-		{{ palabra }}
-		<div class="parteuno">
-			<div>
-				<h1 class="titulo">AHORCADO</h1>
-			</div>
-			<button class="boton" @click="icon = true; formatear()"><span>Empezar</span></button>
-		</div>
+  <div>
+    <div id="contenedorTodo" v-if="app">
+      <div class="parteuno">
+        <div>
+          <h1 class="titulo">AHORCADO</h1>
+        </div>
+        <button
+          class="boton"
+          @click="
+            icon = true;
+            formatear();
+          "
+        >
+          <span>Empezar</span>
+        </button>
+      </div>
+    </div>
 
-		<div class="q-pa-md q-gutter-sm">
-			<q-dialog v-model="icon">
-				<q-card>
-					<q-card-section class="row items-center q-pb-none">
-						<div class="text-h6">{{ data.categoria === "" ? "Elije la categoría" : "Elije la dificultad" }}
-						</div>
-						<q-space />
-						<q-btn icon="X" flat round dense v-close-popup />
-					</q-card-section>
+    <div class="contenedor" v-if="!app">
+      <div class="parte1">
+        <img
+          id="imagen"
+          :src="
+            completado === 'Ganaste'
+              ? imgGanar
+              : errores <= 9
+              ? imgError[errores]
+              : imgPerdiste
+          "
+          alt=""
+		  @click="()=>volverJugar(completado)"
+        />
+        <div>
+          <div class="palabra">
+            <div v-for="(letra, index) in palabra" :key="index" class="letra">
+              <div class="cuadrito">
+                <h1 class="tamaño">{{ buscar(letra) }}</h1>
+              </div>
+              <hr />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="parte2">
+        <button
+          v-for="(item, index) in alfabeto"
+          :key="index"
+          @click="comprobar(item)"
+          :disabled="errores > 9 || completado === 'Ganaste'"
+        >
+          {{ item }}
+        </button>
+      </div>
+      <!-- <h1>hola: {{completado}}</h1> -->
+    </div>
 
-					<q-card-section class="row">
-						<div v-for="(item, index) in categorias" :key="index" class="cardCategoria"
-							v-if="data.categoria === ''" @click="agregarcategoria(item.nombre)">
-							<img :src="item.imagen" alt="" class="imgsCategoria">
-							<h4>{{ item.nombre }}</h4>
-						</div>
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="icon">
+        <q-card>
+          <q-card-section class="row items-center q-pb-none">
+            <div class="text-h6">
+              {{
+                data.categoria === ""
+                  ? "Elije la categoría"
+                  : "Elije la dificultad"
+              }}
+            </div>
+            <q-space />
+            <q-btn icon="X" flat round dense v-close-popup />
+          </q-card-section>
 
-						<button v-for="(item, i) in dificultades" :key="i" v-else @click="() => cargarDatos(item)">{{ item
-						}}</button>
-					</q-card-section>
-				</q-card>
-			</q-dialog>
-		</div>
-	</div>
+          <q-card-section class="row">
+            <div
+              v-for="(item, index) in categorias"
+              :key="index"
+              class="cardCategoria"
+              v-if="cambioPreguntaModal"
+              @click="agregarcategoria(item.nombre)"
+            >
+              <img :src="item.imagen" alt="" class="imgsCategoria" />
+              <h4>{{ item.nombre }}</h4>
+            </div>
 
-	<div class="contenedor" v-if="!app">
-
-		<div class="parte1">
-			<img id="imagen" :src="errores <= 9 ? imgError[errores] : imgPerdiste" alt="" />
-			<div>
-				<div class="palabra">
-					{{ palabra }}
-					<div v-for="(letra, index) in palabra" :key="index" class="letra">
-						<div class="cuadrito">
-							<h1 class="tamaño">{{ buscar(letra) }}</h1>
-						</div>
-						<hr />
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="parte2">
-			<button v-for="(item, index) in alfabeto" :key="index" @click="comprobar(item)"
-				:disabled="errores > 9 || completado === 'Ganaste'">
-				{{ item }}
-			</button>
-		</div>
-		<!-- <h1>hola: {{completado}}</h1> -->
-	</div>
+            <button
+              v-for="(item, i) in dificultades"
+              :key="i"
+              v-else
+              @click="() => cargarDatos(item)"
+            >
+              {{ item }}
+            </button>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -260,174 +323,172 @@ export default {
     margin: 0;
 } */
 .titulo {
-	font-size: 6vw;
-	font-family: 'Press Start 2P', cursive;
-	background: linear-gradient(yellow, red);
-	color: transparent;
-	background-clip: text;
-	-webkit-background-clip: text;
-	-moz-background-clip: text;
-	animation: text 5s linear infinite;
+  font-size: 6vw;
+  font-family: "Press Start 2P", cursive;
+  background: linear-gradient(yellow, red);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  animation: text 5s linear infinite;
 }
 
 a {
-	z-index: 5;
-	width: 80%;
-	display: flex;
-	height: 100%;
-	align-items: center;
-	justify-content: center;
+  z-index: 5;
+  width: 80%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes text {
-	0% {
-		filter: hue-rotate(0deg);
-	}
+  0% {
+    filter: hue-rotate(0deg);
+  }
 
-	100% {
-		filter: hue-rotate(360deg);
-	}
+  100% {
+    filter: hue-rotate(360deg);
+  }
 }
 
 .parteuno {
-	/* padding: 85px 0px; */
-	display: flex;
-	/* justify-content: space-between; */
-	flex-direction: column;
-	align-items: center;
-	background-color: rgba(0, 0, 0, 0.399);
-	height: 100%;
+  /* padding: 85px 0px; */
+  display: flex;
+  /* justify-content: space-between; */
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.399);
+  height: 100%;
 }
 
 .boton {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 80px;
-	background: black;
-	color: #fff;
-	font-family: 'Roboto', sans-serif;
-	font-size: 20px;
-	font-weight: 500;
-	border: none;
-	cursor: pointer;
-	text-transform: uppercase;
-	transition: .3s ease all;
-	border-radius: 5px;
-	position: relative;
-	overflow: hidden;
-
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80px;
+  background: black;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s ease all;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
 }
 
 .boton span {
-	position: relative;
-	z-index: 2;
-	transition: .3s ease all;
-	color: white;
+  position: relative;
+  z-index: 2;
+  transition: 0.3s ease all;
+  color: white;
 }
 
 .boton::after {
-	content: "";
-	width: 1px;
-	height: 1px;
-	background: none;
-	position: absolute;
-	z-index: 1;
-	top: 50%;
-	left: 50%;
-	transition: .3s ease-in-out all;
-	border-radius: 100px;
-	transform-origin: center;
+  content: "";
+  width: 1px;
+  height: 1px;
+  background: none;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transition: 0.3s ease-in-out all;
+  border-radius: 100px;
+  transform-origin: center;
 }
 
 .boton:hover::after {
-	transform: scale(1000);
-	background: #1d5f0a;
+  transform: scale(1000);
+  background: #1d5f0a;
 }
 
 .boton:hover {
-	background: #141414;
-	font-size: 30px;
+  background: #141414;
+  font-size: 30px;
 }
 
 .imgsCategoria {
-
-	height: 100px;
+  height: 100px;
 }
 
 .cardCategoria {
-	margin: 0 10px;
-	border: 1px solid black;
-	padding: 10px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+  margin: 0 10px;
+  border: 1px solid black;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cardCategoria:hover {
-	transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 h4 {
-	margin: 0;
+  margin: 0;
 }
 
 .contenedor {
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-	background-image: url("src/assets/fondo.jpg");
-	background-position: center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-image: url("src/assets/fondo.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 10px;
 }
 
 .parte1 {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 10px;
-	width: 100%;
-	background: rgba(0, 0, 0, 0.551);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.551);
 }
 
 #imagen {
-	width: 65vh;
-	height: 50vh;
-	margin: 0%;
+  width: 65vh;
+  height: 50vh;
+  margin: 0%;
 }
 
 .parte2 {
-	display: grid;
-	width: 100%;
-	grid-template-columns: repeat(9, 1fr);
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(9, 1fr);
 }
 
 .palabra {
-	display: flex;
+  display: flex;
 }
 
 .tamaño {
-	margin: 0;
-	font-size: 50px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  margin: 0;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .letra {
-	margin: 20px;
+  margin: 20px;
 }
 
 .cuadrito {
-	width: 60px;
-	height: 60px;
-	border: 1px solid black;
-	display: flex;
-	justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
 }
 </style>
