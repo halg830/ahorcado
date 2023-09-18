@@ -263,8 +263,10 @@ export default {
           </div>
         </div>
       </div>
+      <div class="contenedor2">
       <div class="parte2">
         <button
+        id="buton"
           v-for="(item, index) in alfabeto"
           :key="index"
           @click="comprobar(item)"
@@ -273,7 +275,7 @@ export default {
           {{ item }}
         </button>
       </div>
-      <!-- <h1>hola: {{completado}}</h1> -->
+      </div>
     </div>
 
     <div class="q-pa-md q-gutter-sm">
@@ -304,6 +306,7 @@ export default {
             </div>
 
             <button
+  
               v-for="(item, i) in dificultades"
               :key="i"
               v-else
@@ -444,6 +447,7 @@ h4 {
   background-size: cover;
   background-repeat: no-repeat;
   padding: 10px;
+  align-items: center;
 }
 
 .parte1 {
@@ -455,21 +459,38 @@ h4 {
   width: 100%;
   background: rgba(0, 0, 0, 0.551);
 }
-
-#imagen {
-  width: 65vh;
-  height: 50vh;
+#imagen{
+  width: 65vw;
+  height: 50vw;
   margin: 0%;
 }
 
+.contenedor2{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
 .parte2 {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(9, 1fr);
+    display: flex;
+    width: 850px;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+#buton{
+  border-radius: 15px;
+  font-size: 20px;
+  width: 50px;
+  height: 15vw;
 }
 
 .palabra {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .tamaño {
@@ -478,17 +499,23 @@ h4 {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
 }
 
+
 .letra {
-  margin: 20px;
+  margin: 1vw;
 }
 
 .cuadrito {
   width: 60px;
   height: 60px;
-  border: 1px solid black;
+  border: 2px solid black;
   display: flex;
   justify-content: center;
+}
+
+.q-pa-md{
+  padding: 0px;
 }
 </style>
