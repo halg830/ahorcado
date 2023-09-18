@@ -165,6 +165,8 @@ const formatear = () => {
     categoria: "",
     dificultad: "",
   };
+
+  cambioPreguntaModal.value=true
 };
 
 /////////
@@ -293,7 +295,7 @@ export default {
             <q-btn icon="X" flat round dense v-close-popup />
           </q-card-section>
 
-          <q-card-section class="row">
+          <q-card-section class="row selecionCardCategoria">
             <div
               v-for="(item, index) in categorias"
               :key="index"
@@ -325,6 +327,12 @@ export default {
 /* *{
     margin: 0;
 } */
+.selecionCardCategoria{
+  display: flex;
+  justify-content: center;
+    align-items: center;
+}
+
 .titulo {
   font-size: 6vw;
   font-family: "Press Start 2P", cursive;
@@ -421,13 +429,14 @@ a {
 }
 
 .cardCategoria {
-  margin: 0 10px;
+  margin: 10px 10px;
   border: 1px solid black;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 25vh;
 }
 
 .cardCategoria:hover {
@@ -457,11 +466,12 @@ h4 {
   align-items: center;
   padding: 10px;
   width: 100%;
+  height: 70%;
   background: rgba(0, 0, 0, 0.551);
 }
 #imagen{
-  width: 65vw;
-  height: 50vw;
+  width: 50%;
+  height: 75%;
   margin: 0%;
 }
 
@@ -474,23 +484,24 @@ h4 {
 
 .parte2 {
     display: flex;
-    width: 850px;
     align-content: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 1vw;
+    max-width: 900px;
 }
 #buton{
   border-radius: 15px;
   font-size: 20px;
   width: 50px;
-  height: 15vw;
+  height: 50px;
 }
 
 .palabra {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 30px
 }
 
 .tamaño {
