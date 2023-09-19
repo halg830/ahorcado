@@ -22,7 +22,7 @@ const alfabeto = Array.from({ length: 26 }, (_, index) =>
   String.fromCharCode(65 + index)
 );
 
-const cambioPreguntaModal = ref(true) //true: primera pregunta, false: segunda
+const cambioPreguntaModal = ref(true); //true: primera pregunta, false: segunda
 
 const data = ref({
   categoria: "Animales",
@@ -56,7 +56,7 @@ const armarPalabra = () => {
   const strPalabra =
     bancoPalabras[data.value.categoria][data.value.dificultad][obtenerNumero()];
   const arrPalabra = Array.from(strPalabra);
-  if(palabra.value.length>0) palabra.value = []
+  if (palabra.value.length > 0) palabra.value = [];
   for (const letra of arrPalabra) {
     palabra.value.push(letra);
   }
@@ -78,30 +78,39 @@ const imgError = [
 const errores = ref(0);
 
 const cantErrorDificultad = {
-	Fácil: 1,
-	Medio: 2,
-	Difícil: 3
-}
+  Fácil: 1,
+  Medio: 2,
+  Difícil: 3,
+};
 
 const comprobar = (letra) => {
-  console.log("principio")
+  console.log("principio");
 
-  if (palabra.value.includes(letra.toLowerCase()) ) {
-	console.log(descubiertas.value.includes(letra), "data", data.value.dificultad!="Difícil" )
-	if(descubiertas.value.includes(letra) && data.value.dificultad==="Difícil") {
-		console.log("hola")
-		errores.value+=cantErrorDificultad[data.value.dificultad]
-		return
-	} 
-	console.log("adios")
+  if (palabra.value.includes(letra.toLowerCase())) {
+    console.log(
+      descubiertas.value.includes(letra),
+      "data",
+      data.value.dificultad != "Difícil"
+    );
+    if (
+      descubiertas.value.includes(letra) &&
+      data.value.dificultad === "Difícil"
+    ) {
+      console.log("hola");
+      errores.value += cantErrorDificultad[data.value.dificultad];
+      return;
+    }
+    console.log("adios");
     descubiertas.value.push(letra);
-    if(data.value.dificultad!="Difícil") event.target.setAttribute("disabled", "true");
+    if (data.value.dificultad != "Difícil")
+      event.target.setAttribute("disabled", "true");
     return;
   }
 
   console.log("sin if");
-  errores.value += cantErrorDificultad[data.value.dificultad]
-  if(data.value.dificultad!="Difícil") event.target.setAttribute("disabled", "true");
+  errores.value += cantErrorDificultad[data.value.dificultad];
+  if (data.value.dificultad != "Difícil")
+    event.target.setAttribute("disabled", "true");
 };
 
 const buscar = computed(() => {
@@ -133,11 +142,10 @@ const completado = computed(() => {
   return "Nada";
 });
 
-const volverJugar = (confirmacion)=>{
-	if(confirmacion==="Ganaste" || errores.value>=9) icon.value = true; return
-
-	return
-}
+const volverJugar = () => {
+  formatear()
+  icon.value = true;
+};
 
 //////
 
@@ -166,7 +174,7 @@ const formatear = () => {
     dificultad: "",
   };
 
-  cambioPreguntaModal.value=true
+  cambioPreguntaModal.value = true;
 };
 
 /////////
@@ -178,10 +186,10 @@ const datosCargados = ref(false);
 // Simula una solicitud HTTP para cargar los datos (esto puede ser una solicitud real)
 const cargarDatos = async (item) => {
   // Simula una demora de 1 segundo para cargar los datos (elimina esto en tu aplicación real)
-descubiertas.value=[""]	
-  icon.value=false
-	cambioPreguntaModal.value=true
-	errores.value=0
+  descubiertas.value = [""];
+  icon.value = false;
+  cambioPreguntaModal.value = true;
+  errores.value = 0;
   // Luego, asigna los datos y marca que están cargados
   datos.value = ["Dato 1", "Dato 2", "Dato 3"];
   data.value.dificultad = item;
@@ -190,19 +198,9 @@ descubiertas.value=[""]
   datosCargados.value = true;
 };
 
-// Llama a cargarDatos cuando el componente se monta
-
-const comenzar = (item) => {
-  data.value.dificultad = item;
-
-  app.value = false;
-};
-
-onMounted(() => {});
-
 const agregarcategoria = (item) => {
   data.value.categoria = item;
-  cambioPreguntaModal.value=false
+  cambioPreguntaModal.value = false;
 };
 </script>
 
@@ -252,8 +250,13 @@ export default {
               : imgPerdiste
           "
           alt=""
-		  @click="()=>volverJugar(completado)"
         />
+        <button
+          :style="errores >= 10 || completado === 'Ganaste' ? 'display: block' : 'display: none'"
+          @click="() => volverJugar()"
+        >
+          Volver a jugar
+        </button>
         <div>
           <div class="palabra">
             <div v-for="(letra, index) in palabra" :key="index" class="letra">
@@ -266,17 +269,17 @@ export default {
         </div>
       </div>
       <div class="contenedor2">
-      <div class="parte2">
-        <button
-        id="buton"
-          v-for="(item, index) in alfabeto"
-          :key="index"
-          @click="comprobar(item)"
-          :disabled="errores > 9 || completado === 'Ganaste'"
-        >
-          {{ item }}
-        </button>
-      </div>
+        <div class="parte2">
+          <button
+            id="buton"
+            v-for="(item, index) in alfabeto"
+            :key="index"
+            @click="comprobar(item)"
+            :disabled="errores > 9 || completado === 'Ganaste'"
+          >
+            {{ item }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -308,7 +311,6 @@ export default {
             </div>
 
             <button
-  
               v-for="(item, i) in dificultades"
               :key="i"
               v-else
@@ -327,10 +329,10 @@ export default {
 /* *{
     margin: 0;
 } */
-.selecionCardCategoria{
+.selecionCardCategoria {
   display: flex;
   justify-content: center;
-    align-items: center;
+  align-items: center;
 }
 
 .titulo {
@@ -469,13 +471,13 @@ h4 {
   height: 70%;
   background: rgba(0, 0, 0, 0.551);
 }
-#imagen{
+#imagen {
   width: 50%;
   height: 75%;
   margin: 0%;
 }
 
-.contenedor2{
+.contenedor2 {
   height: 100%;
   display: flex;
   justify-content: center;
@@ -483,14 +485,14 @@ h4 {
 }
 
 .parte2 {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1vw;
-    max-width: 900px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1vw;
+  max-width: 900px;
 }
-#buton{
+#buton {
   border-radius: 15px;
   font-size: 20px;
   width: 50px;
@@ -501,7 +503,7 @@ h4 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 30px
+  margin-top: 30px;
 }
 
 .tamaño {
@@ -512,7 +514,6 @@ h4 {
   align-items: center;
   color: white;
 }
-
 
 .letra {
   margin: 1vw;
@@ -526,7 +527,7 @@ h4 {
   justify-content: center;
 }
 
-.q-pa-md{
+.q-pa-md {
   padding: 0px;
 }
 </style>
