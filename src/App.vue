@@ -285,7 +285,7 @@ export default {
 
     <div class="q-pa-md q-gutter-sm">
       <q-dialog v-model="icon">
-        <q-card>
+        <q-card class="modal">
           <q-card-section class="row items-center q-pb-none">
             <div class="text-h6">
               {{
@@ -492,11 +492,17 @@ h4 {
   gap: 1vw;
   max-width: 900px;
 }
-#buton {
+#buton{
   border-radius: 15px;
   font-size: 20px;
   width: 50px;
   height: 50px;
+  cursor: pointer;
+}
+
+#buton:hover{
+  background-color: rgb(211, 0, 81);
+  box-shadow: 0px 0px 10px 0px rgb(255, 0, 0);
 }
 
 .palabra {
@@ -522,7 +528,7 @@ h4 {
 .cuadrito {
   width: 60px;
   height: 60px;
-  border: 2px solid black;
+  border: 2px solid rgb(255, 255, 255);
   display: flex;
   justify-content: center;
 }
@@ -530,4 +536,41 @@ h4 {
 .q-pa-md {
   padding: 0px;
 }
+
+
+.modal{
+  background:linear-gradient(rgb(0, 4, 255), rgb(128, 0, 255));
+  cursor: pointer;
+}
+
+.cardCategoria{
+  background-color: white;
+  border: 0px;
+}
+
+.cardCategoria:hover{
+  background-color: rgb(60, 255, 0);
+  box-shadow: 0px 0px 10px 0px red;
+  border-radius: 10px;
+}
+
+.text-h6{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dificultad{
+  background-color: tomato;
+  cursor: pointer;
+}
+
+.dificultad:hover{
+  background-color: chartreuse;
+}
+
+volverajugar{
+  cursor:pointer;
+}
+
 </style>
