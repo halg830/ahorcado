@@ -252,6 +252,7 @@ export default {
           alt=""
         />
         <button
+          class="volver"
           :style="errores >= 10 || completado === 'Ganaste' ? 'display: block' : 'display: none'"
           @click="() => volverJugar()"
         >
@@ -288,11 +289,12 @@ export default {
         <q-card class="modal">
           <q-card-section class="row items-center q-pb-none">
             <div class="text-h6">
-              {{
+              <p>{{
                 data.categoria === ""
                   ? "Elije la categoría"
                   : "Elije la dificultad"
-              }}
+              }}</p>
+              
             </div>
             <q-space />
             <q-btn icon="X" flat round dense v-close-popup />
@@ -315,6 +317,8 @@ export default {
               :key="i"
               v-else
               @click="() => cargarDatos(item)"
+              class="butoncategorias"
+              :class=" i==0 ? 'facil' : i==1 ? 'medio' : 'dificil'"
             >
               {{ item }}
             </button>
@@ -326,9 +330,28 @@ export default {
 </template>
 
 <style scoped>
-/* *{
-    margin: 0;
-} */
+
+.facil:hover{
+  background-color: rgb(158, 185, 255);
+  box-shadow: 0px 0px 10px 0px rgb(158, 185, 255);
+  border: 0px;
+  border-radius: 10px;
+}
+
+.medio:hover{
+  background-color: rgb(255, 146, 74);
+  box-shadow: 0px 0px 10px 0px rgb(255, 146, 74);
+  border: 0px;
+  border-radius: 10px;
+}
+
+.dificil:hover{
+  background-color: rgb(255, 70, 70);
+  box-shadow: 0px 0px 10px 0px rgb(255, 70, 70);
+  border: 0px;
+  border-radius: 10px;
+}
+
 .selecionCardCategoria {
   display: flex;
   justify-content: center;
@@ -539,38 +562,68 @@ h4 {
 
 
 .modal{
-  background:linear-gradient(rgb(0, 4, 255), rgb(128, 0, 255));
+  background:linear-gradient(rgba(74, 192, 255, 0.769), rgba(128, 0, 255, 0.641));
   cursor: pointer;
 }
 
 .cardCategoria{
   background-color: white;
   border: 0px;
+  border-radius: 10px;
 }
 
 .cardCategoria:hover{
-  background-color: rgb(60, 255, 0);
-  box-shadow: 0px 0px 10px 0px red;
+  background-color: rgb(133, 239, 255);
+  box-shadow: 0px 0px 10px 0px rgb(216, 98, 255);
   border-radius: 10px;
+  size: 25px;
 }
 
 .text-h6{
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "Press Start 2P", cursive; 
 }
 
-.dificultad{
-  background-color: tomato;
-  cursor: pointer;
-}
-
-.dificultad:hover{
-  background-color: chartreuse;
-}
 
 volverajugar{
   cursor:pointer;
+}
+
+.butoncategorias{
+  background-color: rgb(255, 255, 255);
+  width: 150px;
+  height: 50px;
+  margin: 10px;
+  border: 0px;
+  border-radius: 10px;
+  font-family:"Press Start 2P", cursive;
+}
+
+/* .butoncategorias:hover{
+  background-color: rgb(255, 99, 99);
+  box-shadow: 0px 0px 10px 0px red;
+  border: 0px;
+  border-radius: 10px;
+} */
+
+h4{
+  font-size: 20px;
+  font-family: "Press Start 2P", cursive; 
+}
+
+.volver{
+  width: 150px;
+  height: 30px;
+  background-color: cornsilk;
+  border: 0px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.volver:hover{
+  background-color: rgb(253, 108, 55);
 }
 
 </style>
